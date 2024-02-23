@@ -20,3 +20,9 @@ namespace helper_api_dotnet_o5.Models.G12Nba
         public string? Abbreviation { get; set; }
     }
 }
+
+public enum Conference
+{
+    East,
+    West,
+}

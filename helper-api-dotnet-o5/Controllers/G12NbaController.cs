@@ -38,7 +38,7 @@ namespace helper_api_dotnet_o5.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status502BadGateway)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public IActionResult Get([FromQuery] string? conference)
+        public IActionResult Get([FromQuery] Conference? conference)
         {
             _logger.LogInformation($"APIKEY: {APIKEY}", DateTime.UtcNow.ToLongTimeString());
             var route = "teams";
@@ -54,7 +54,7 @@ namespace helper_api_dotnet_o5.Controllers
             }
             catch (System.AggregateException err)
             {
-                string msg = $"API Helper Client received a StatusError from API Server. StatusCode";
+                string msg = $"API Helper Client received a StatusError from API Server";
                 _logger.LogInformation($"Error in MetodoGET: {err}", DateTime.UtcNow.ToLongTimeString());
                 throw new HttpRequestException(msg, err.InnerException, System.Net.HttpStatusCode.Unauthorized);
             }
