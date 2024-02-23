@@ -103,5 +103,9 @@ Porém para evitar causar "dificuldades" para os colegas que forem testar, ficou
 
 ## REFS:
 
-- Site 1
-- Site 2
+- [API discoverability with Swagger and Swashbuckle](https://learn.microsoft.com/en-us/samples/dotnet/aspnetcore.docs/getstarted-swashbuckle-aspnetcore/?tabs=visual-studio-code)
+- [Swashbuckle.AspNetCore Repo](https://github.com/domaindrivendev/Swashbuckle.AspNetCore#swashbuckleaspnetcoreannotations)
+- [Enum representation in C# Web APIs & Swagger with JsonStringEnumConverter](https://www.linkedin.com/pulse/simplifying-enum-representation-c-web-apis-swagger-agrawal/)
+- [Best practice to return errors in ASP.NET Web API](https://stackoverflow.com/questions/10732644/best-practice-to-return-errors-in-asp-net-web-api)
+- [Adding headers in httpClient](https://stackoverflow.com/a/38077835/1809554)
+-
