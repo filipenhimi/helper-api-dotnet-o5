@@ -97,27 +97,28 @@ public class SimulacaoInvestimentoService
 
     public Investimento CalculaInvestimento(decimal capitalInvestido, decimal taxa, EPeriod period, int periodAmount)
     {
-
         switch (period)
         {
             case EPeriod.Days:
                 {
                     var taxaCalc = (decimal)((taxa * periodAmount)/100);
                     var jurosPago = taxaCalc * capitalInvestido;
+                    jurosPago = jurosPago - (((decimal)(calcularIRCDI(periodAmount))) * jurosPago);
 
                     return new Investimento() { jurosPago = jurosPago, taxaAplicada = taxaCalc };
                 }
             case EPeriod.Months:
                 {
-                    var taxaCalc = (decimal)(((taxa * 30)/100) * periodAmount);
+                    var taxaCalc = (decimal)(((taxa * 20)/100) * periodAmount);
                     var jurosPago = taxaCalc * capitalInvestido;
-
+                    jurosPago = jurosPago - (((decimal)(calcularIRCDI(periodAmount * 20))) * jurosPago);
                     return new Investimento() { jurosPago = jurosPago, taxaAplicada = taxaCalc };
                 }
             case EPeriod.Years:
                 {
-                    var taxaCalc = (decimal)(((taxa*365)/100) * periodAmount);
-                    var jurosPago = taxaCalc * capitalInvestido;
+                    var taxaCalc = (decimal)(((taxa*240)/100) * periodAmount);
+                    var jurosPago = (taxaCalc * capitalInvestido);
+                    jurosPago = jurosPago - (((decimal)(calcularIRCDI(periodAmount * 240))) * jurosPago);
 
                     return new Investimento() { jurosPago = jurosPago, taxaAplicada = taxaCalc };
                 }
@@ -127,6 +128,31 @@ public class SimulacaoInvestimentoService
                     return new Investimento() { jurosPago = 0.00M, taxaAplicada = 0.00M };
                 };
         }
+    }
+
+    public double calcularIRCDI(int dias)
+    {
+        if(dias >=0 && dias <= 180)
+        {
+            return 0.225;
+        }
+
+        if (dias >= 181 && dias <= 360)
+        {
+            return 0.20;
+        }
+
+        if (dias >= 361 && dias <= 720)
+        {
+            return 0.175;
+        }
+
+        if (dias > 720)
+        {
+            return 0.15;
+        }
+
+        return 0.00;
     }
 
     public async Task<SimulacaoInvestimentoDTO> SimulacaoInvestimento(decimal capitalInvestido, EPeriod period, int periodAmount)
