@@ -17,7 +17,7 @@ public class InvestimentoController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<SimulacaoInvestimentoDTO>> SimulacaoInvestimentoCDI([FromQuery] Decimal valorInvestido, [FromQuery] EPeriod period, [FromQuery] int periodAmount)
+    public async Task<ActionResult<SimulacaoInvestimentoDTO>> SimulacaoInvestimentoCDI([FromQuery(Name = "valorInvestido")] Decimal valorInvestido, [FromQuery(Name = "period")] EPeriod period, [FromQuery(Name = "periodAmount")] int periodAmount)
     {
         try
         {
@@ -97,11 +97,22 @@ public class SimulacaoInvestimentoService
 
     public Investimento CalculaInvestimento(decimal capitalInvestido, decimal taxa, EPeriod period, int periodAmount)
     {
+        var diasUtilAno = 253;
+        var diasUtilMes = diasUtilAno/12;
+        var taxaAnual = taxa * diasUtilAno;
+        var taxaMensal = taxaAnual/12;
+        var taxaDiaria = taxaMensal / diasUtilMes;
+        Console.WriteLine($"dias UtilAno: {diasUtilAno}");
+        Console.WriteLine($"dias UtilMes: {diasUtilMes}");
+        Console.WriteLine($"Taxa Anual: {taxaAnual}");
+        Console.WriteLine($"Taxa Mensal: {taxaMensal}");
+        Console.WriteLine($"Taxa Diária: {taxaDiaria}");
+
         switch (period)
         {
             case EPeriod.Days:
                 {
-                    var taxaCalc = (decimal)((taxa * periodAmount)/100);
+                    var taxaCalc = (decimal)((taxaDiaria) /100);
                     var jurosPago = taxaCalc * capitalInvestido;
                     jurosPago = jurosPago - (((decimal)(calcularIRCDI(periodAmount))) * jurosPago);
 
@@ -109,16 +120,16 @@ public class SimulacaoInvestimentoService
                 }
             case EPeriod.Months:
                 {
-                    var taxaCalc = (decimal)(((taxa * 20)/100) * periodAmount);
+                    var taxaCalc = (decimal)(((taxaMensal) /100) * periodAmount);
                     var jurosPago = taxaCalc * capitalInvestido;
-                    jurosPago = jurosPago - (((decimal)(calcularIRCDI(periodAmount * 20))) * jurosPago);
+                    jurosPago = jurosPago - (((decimal)(calcularIRCDI(periodAmount * diasUtilMes))) * jurosPago);
                     return new Investimento() { jurosPago = jurosPago, taxaAplicada = taxaCalc };
                 }
             case EPeriod.Years:
                 {
-                    var taxaCalc = (decimal)(((taxa*240)/100) * periodAmount);
+                    var taxaCalc = (decimal)(((taxaAnual) / 100) * periodAmount);
                     var jurosPago = (taxaCalc * capitalInvestido);
-                    jurosPago = jurosPago - (((decimal)(calcularIRCDI(periodAmount * 240))) * jurosPago);
+                    jurosPago = jurosPago - (((decimal)(calcularIRCDI(periodAmount * diasUtilAno))) * jurosPago);
 
                     return new Investimento() { jurosPago = jurosPago, taxaAplicada = taxaCalc };
                 }
