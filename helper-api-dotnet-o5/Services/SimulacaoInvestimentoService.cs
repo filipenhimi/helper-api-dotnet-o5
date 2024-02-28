@@ -10,6 +10,13 @@ namespace helper_api_dotnet_o5.Services;
 
 public class SimulacaoInvestimentoService : ISimulacaoInvestimentoService
 {
+    private IConfiguration _configuration;
+
+    public SimulacaoInvestimentoService(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
+
     public async Task<decimal> ConsultarTaxaDiaFechado()
     {
         var dataAtual = DateTime.Now;
@@ -17,7 +24,14 @@ public class SimulacaoInvestimentoService : ISimulacaoInvestimentoService
         var dataAnt = DateTime.Now.AddDays(-1);
         var dataAntToString = dataAnt.ToString("dd/MM/yyyy");
 
-        var options = new RestClientOptions("http://api.bcb.gov.br");
+        var baseUrlGov = _configuration.GetSection("URL_API_GOV").Value;
+
+        if(baseUrlGov == null)
+        {
+            throw new NullReferenceException("Variável de ambiente URL_API_GOV não encontrada");
+        }
+
+        var options = new RestClientOptions(baseUrlGov);
         var client = new RestClient(options);
         var request = new RestRequest($"dados/serie/bcdata.sgs.12/dados");
 
