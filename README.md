@@ -32,7 +32,7 @@ HELPER OPENED API
 - Lucas Cruz
 - Fabrício Gomes
 
-# Grupo8 ()
+# Grupo8 (https://docs.coincap.io)
 - Tiago Rodrigues
 - Isabele Moreira
 - Rodrigo Batista
