@@ -31,6 +31,7 @@ namespace helper_api_dotnet_o5.Controllers
         /// Apenas times da temporada atual
         /// </remarks>
         /// <param name="conference">Filtro por conferência (opcional): East, West.</param>
+        /// <param name="team">Filtro por nome do time (opcional)</param>
         [HttpGet]
         [Route("teams")]
         [ProducesResponseType(typeof(List<Team>), StatusCodes.Status200OK)]
@@ -38,7 +39,7 @@ namespace helper_api_dotnet_o5.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status502BadGateway)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public IActionResult Get([FromQuery] Conference? conference)
+        public IActionResult Get([FromQuery] Conference? conference, [FromQuery] string? team)
         {
             _logger.LogInformation($"APIKEY: {APIKEY}", DateTime.UtcNow.ToLongTimeString());
             var route = "teams";
@@ -48,7 +49,11 @@ namespace helper_api_dotnet_o5.Controllers
             {
                 var result = api.MetodoGET<List<Team>>(route, APIKEY, "data").Result;
                 if (result.Count > 0)
+                {
+                    if (team != null)
+                        result = result.Where(o => o.FullName.ToLower().IndexOf(team.ToLower()) != -1).ToList();
                     return Ok(result);
+                }
                 else
                     return NoContent();
             }
