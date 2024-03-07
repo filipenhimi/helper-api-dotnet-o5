@@ -6,32 +6,14 @@ namespace helper_api_dotnet_o5.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BanksController : ControllerBase
+    public class BankController : ControllerBase
     {
         private const string ENDPOINT = "https://brasilapi.com.br/api/banks/v1";
-        private readonly ILogger<BanksController> _logger;
+        private readonly ILogger<BankController> _logger;
 
-        public BanksController(ILogger<BanksController> logger)
+        public BankController(ILogger<BankController> logger)
         {
             _logger = logger;
-        }
-
-        [HttpGet]
-        [Route("code/{code}")]
-        [ProducesResponseType(typeof(Banco), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status502BadGateway)]
-        public IActionResult GetByCode(int code)
-        {
-            var route = $"{code}";
-            var api = new HelperAPI(ENDPOINT);
-            var result = api.MetodoGET<Banco>(route).Result;
-
-            if (result != null) 
-                return Ok(result);
-            else
-                return NoContent();
         }
 
         [HttpGet]
@@ -40,7 +22,7 @@ namespace helper_api_dotnet_o5.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status502BadGateway)]
-        public IActionResult GetByName(string name)
+        public IActionResult Get(string name)
         {
             var api = new HelperAPI(ENDPOINT);
             var result = api.MetodoGET<List<Banco>>(string.Empty).Result;
