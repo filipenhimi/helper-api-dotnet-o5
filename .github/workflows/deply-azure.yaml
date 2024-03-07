@@ -8,7 +8,7 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: helper-api-dotnet-o5
-  AZURE_WEBAPP_PACKAGE_PATH: "./helper-api-dotnet-o5/published"
+  AZURE_WEBAPP_PACKAGE_PATH: "./published"
   DOTNET_VERSION: "7.0.x"
 
 jobs:
@@ -46,7 +46,7 @@ jobs:
       #     pwd
 
       # Deploy to Azure Web apps
-      - name: "Run Azure webapp deploy action using publish profile credentials"
+      - name: "Deploy to Azure WebApp
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
