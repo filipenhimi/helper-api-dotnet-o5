@@ -6,7 +6,7 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: helper-api-dotnet-o5
-  AZURE_WEBAPP_PACKAGE_PATH: "."
+  AZURE_WEBAPP_PACKAGE_PATH: "./helper-api-dotnet-o5"
   DOTNET_VERSION: "7.0.x"
 
 jobs:
@@ -27,7 +27,7 @@ jobs:
         run: |
           dotnet restore
           dotnet build --configuration Release
-          dotnet publish -c Release --property:PublishDir='${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/app'
+          dotnet publish -c Release --property:PublishDir='${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
 
       # Deploy to Azure Web apps
       - name: "Run Azure webapp deploy action using publish profile credentials"
