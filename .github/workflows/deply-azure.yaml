@@ -1,6 +1,7 @@
 name: Deploy .NET Core API
 
 on:
+  workflow_dispatch:
   push:
     branches: [grupo12]
 
