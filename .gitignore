@@ -400,3 +400,4 @@ FodyWeavers.xsd
 
 # Environment Variables
 .env
+*.PublishSettings
