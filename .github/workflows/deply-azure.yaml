@@ -29,13 +29,13 @@ jobs:
 
       # Run dotnet build and publish
       - name: Restore
-        run: dotnet restore
+        run: dotnet restore ${{env.AZURE_WEBAPP_NAME}}
 
       - name: Build
-        run: dotnet build --no-restore -c Release
+        run: dotnet build --no-restore -c Release ${{env.AZURE_WEBAPP_NAME}}
 
       - name: Publish
-        run: dotnet publish --no-build -c Release -o ${{env.AZURE_WEBAPP_PACKAGE_PATH}}
+        run: dotnet publish --no-build -c Release -o ${{env.AZURE_WEBAPP_PACKAGE_PATH}} ${{env.AZURE_WEBAPP_NAME}}
 
       # - name: dotnet build and publish
       #   run: |
