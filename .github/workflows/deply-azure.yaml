@@ -1,4 +1,5 @@
 name: Deploy .NET Core API
+# new ref: https://www.youtube.com/watch?v=cGvmbYE4HOY
 
 on:
   workflow_dispatch:
@@ -7,7 +8,7 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: helper-api-dotnet-o5
-  AZURE_WEBAPP_PACKAGE_PATH: "helper-api-dotnet-o5"
+  AZURE_WEBAPP_PACKAGE_PATH: "./helper-api-dotnet-o5/published"
   DOTNET_VERSION: "7.0.x"
 
 jobs:
@@ -15,24 +16,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Checkout the repo
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
         with:
           ref: "grupo12"
 
-      # Setup .NET Core SDK
+      # Setup .NET Core SDK with ${{ env.DOTNET_VERSION }}
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       # Run dotnet build and publish
-      - name: dotnet build and publish
-        run: |
-          pwd
-          dotnet restore ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-          dotnet build --configuration Release ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-          dotnet publish -c Release --property:PublishDir='${{ env.AZURE_WEBAPP_PACKAGE_PATH }}' ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-          pwd
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore -c Release
+
+      - name: Publish
+        run: dotnet publish --no-build -c Release -o ${{env.AZURE_WEBAPP_PACKAGE_PATH}}
+
+      # - name: dotnet build and publish
+      #   run: |
+      #     pwd
+      #     dotnet restore ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      #     dotnet build --configuration Release ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      #     dotnet publish -c Release --property:PublishDir='${{ env.AZURE_WEBAPP_PACKAGE_PATH }}' ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      #     pwd
 
       # Deploy to Azure Web apps
       - name: "Run Azure webapp deploy action using publish profile credentials"
@@ -40,4 +51,4 @@ jobs:
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
