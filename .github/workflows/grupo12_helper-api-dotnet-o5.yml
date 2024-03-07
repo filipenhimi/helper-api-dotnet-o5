@@ -4,8 +4,6 @@
 name: Build and deploy ASP.Net Core app to Azure Web App - helper-api-dotnet-o5
 
 on:
-  push:
-    branches: [grupo12]
   workflow_dispatch:
 
 env:

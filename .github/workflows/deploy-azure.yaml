@@ -19,23 +19,36 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          ref: "grupo12"
+          ref: grupo12
+      - name: Show .NET Versions BEFORE
+        run: |
+          dotnet --list-sdks
+          echo '*** Versão default assumida para o .NET ***'
+          dotnet --version
 
       # Setup .NET Core SDK with ${{ env.DOTNET_VERSION }}
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Show .NET Versions AFTER
+        run: |
+          dotnet --list-sdks
+          echo '*** Versão default assumida para o .NET ***'
+          dotnet --version
 
       # Run dotnet build and publish
       - name: Restore
-        run: dotnet restore ${{env.AZURE_WEBAPP_NAME}}
+        run: dotnet restore
+        working-directory: ${{env.AZURE_WEBAPP_NAME}}
 
       - name: Build
-        run: dotnet build --no-restore -c Release ${{env.AZURE_WEBAPP_NAME}}
+        run: dotnet build --no-restore -c Release
+        working-directory: ${{env.AZURE_WEBAPP_NAME}}
 
       - name: Publish
-        run: dotnet publish --no-build -c Release -o ${{env.AZURE_WEBAPP_PACKAGE_PATH}} ${{env.AZURE_WEBAPP_NAME}}
+        run: dotnet publish --no-build -c Release -o ${{env.AZURE_WEBAPP_PACKAGE_PATH}}
+        working-directory: ${{env.AZURE_WEBAPP_NAME}}
 
       # Deploy to Azure Web apps
       - name: Deploy to Azure WebApp
