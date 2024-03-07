@@ -6,7 +6,7 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: helper-api-dotnet-o5
-  AZURE_WEBAPP_PACKAGE_PATH: "./helper-api-dotnet-o5"
+  AZURE_WEBAPP_PACKAGE_PATH: "helper-api-dotnet-o5/helper-api-dotnet-o5.sln"
   DOTNET_VERSION: "7.0.x"
 
 jobs:
@@ -35,4 +35,4 @@ jobs:
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }}
-          package: "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/app"
+          package: "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
