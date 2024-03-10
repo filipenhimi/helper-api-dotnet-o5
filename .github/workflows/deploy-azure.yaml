@@ -52,7 +52,7 @@ jobs:
 
       - name: Check DIR Release
         run: |
-          echo -e "Current dir:" 
+          echo -e "Current directory:" 
           pwd
           echo -e "\nList dir def" 
           ls -laht ./
