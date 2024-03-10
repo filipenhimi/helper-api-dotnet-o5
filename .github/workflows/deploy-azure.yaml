@@ -56,17 +56,8 @@ jobs:
           pwd
           echo -e "\nList dir def" 
           ls -laht ./
-          echo -e "\n\nList dir ${{env.AZURE_WEBAPP_PACKAGE_PATH}}" 
-          ls -laht ${{env.AZURE_WEBAPP_PACKAGE_PATH}}
-
-      - name: Check DIR Release
-        run: |
-          echo -e "Current dir:" 
-          pwd
-          echo -e "\nList dir def" 
-          ls -laht ./
-          echo -e "\n\nList dir ${{env.AZURE_WEBAPP_PACKAGE_PATH}}" 
-          ls -laht ${{env.AZURE_WEBAPP_PACKAGE_PATH}}
+          echo -e "\n\nList dir ${{env.AZURE_WEBAPP_NAME}}/${{env.AZURE_WEBAPP_PACKAGE_PATH}}" 
+          ls -laht ${{env.AZURE_WEBAPP_NAME}}/${{env.AZURE_WEBAPP_PACKAGE_PATH}}
 
       # Deploy to Azure Web apps
       - name: Deploy to Azure WebApp
@@ -74,7 +65,7 @@ jobs:
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: "${{env.AZURE_WEBAPP_PACKAGE_PATH}}"
+          package: ${{env.AZURE_WEBAPP_NAME}}/${{env.AZURE_WEBAPP_PACKAGE_PATH}}
           clean: true
           restart: true
 
