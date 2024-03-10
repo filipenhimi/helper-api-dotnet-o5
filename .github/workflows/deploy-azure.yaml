@@ -44,11 +44,16 @@ jobs:
 
       - name: Build
         run: dotnet build --no-restore -c Release
-        working-directory: ${{env.AZURE_WEBAPP_NAME}}
 
       - name: Publish
         run: dotnet publish --no-build -c Release --property:PublishDir=${{env.AZURE_WEBAPP_PACKAGE_PATH}}
-        working-directory: ${{env.AZURE_WEBAPP_NAME}}
+
+      - name: Check DIR Release
+        run: |
+          echo -e "\nListando dir def" 
+          ls -laht ./
+          echo -e "\n\nListando dir ${{env.AZURE_WEBAPP_PACKAGE_PATH}}" 
+          ls -laht ${{env.AZURE_WEBAPP_PACKAGE_PATH}}
 
       - name: Check DIR Release
         run: |
