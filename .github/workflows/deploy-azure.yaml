@@ -68,6 +68,7 @@ jobs:
           package: ${{env.AZURE_WEBAPP_NAME}}/${{env.AZURE_WEBAPP_PACKAGE_PATH}}
           clean: true
           restart: true
+          resource-group-name: pucmg-pos
 
       # Publish artifacts
       - name: Publish Artifacts
