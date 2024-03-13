@@ -1,11 +1,10 @@
 ﻿using helper_api_dotnet_o5.Infrastructure;
 using helper_api_dotnet_o5.Models.Coincap;
+using helper_api_dotnet_o5.Models.Paises;
 using Microsoft.AspNetCore.Mvc;
 
 namespace helper_api_dotnet_o5.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class CoincapController : ControllerBase
     {
         private const string ENDPOINT = "https://api.coincap.io/v2";
@@ -17,6 +16,7 @@ namespace helper_api_dotnet_o5.Controllers
         }
 
         [HttpGet]
+        [Route("assets")]
         [ProducesResponseType(typeof(List<Assets>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -25,45 +25,45 @@ namespace helper_api_dotnet_o5.Controllers
         {
             var route = $"assets";
             var api = new HelperAPI(ENDPOINT);
-            var result = api.MetodoGET<List<Assets>>(route).Result;
+            var result = api.MetodoGET<Assets>(route).Result;
 
-            if (result.Count > 0) 
+            if (result.data.Count > 0)
                 return Ok(result);
             else
                 return NoContent();
         }
 
         [HttpGet]
-        [Route("{assistId}")]
-        [ProducesResponseType(typeof(AssistDetail), StatusCodes.Status200OK)]
+        [Route("assets/{assetId}")]
+        [ProducesResponseType(typeof(AssetDetail), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status502BadGateway)]
-        public IActionResult Detail(string assistId)
+        public IActionResult Detail(string assetId)
         {
-            var route = $"assists/{assistId}";
+            var route = $"assets/{assetId}";
             var api = new HelperAPI(ENDPOINT);
-            var result = api.MetodoGET<AssistDetail>(route).Result;
+            var result = api.MetodoGET<AssetDetail>(route).Result;
 
-            if (result.Count > 0) 
+            if (result.data.id != null)
                 return Ok(result);
             else
                 return NoContent();
         }
-        
+
         [HttpGet]
-        [Route("{assistId,interval}")]
+        [Route("assets/{assetId}/interval/{interval}")]
         [ProducesResponseType(typeof(History), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status502BadGateway)]
-        public IActionResult Detail(string assistId)
+        public IActionResult History(string assetId, string interval)
         {
-            var route = $"assists/{assistId}/history?interval={interval}";
+            var route = $"assets/{assetId}/history?interval={interval}";
             var api = new HelperAPI(ENDPOINT);
             var result = api.MetodoGET<History>(route).Result;
 
-            if (result.Count > 0) 
+            if (result.data.Count > 0)
                 return Ok(result);
             else
                 return NoContent();

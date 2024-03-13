@@ -2,17 +2,21 @@ using Newtonsoft.Json;
 
 namespace helper_api_dotnet_o5.Models.Coincap
 {
+
     public partial class History
     {
-
+        [JsonProperty("data")]
+        public List<AssetHistoryData> data { get; set; }
+    }
+    public partial class AssetHistoryData
+    {
         [JsonProperty("priceUsd")]
-        public PaiId PaiId { get; set; }
+        public string priceUsd { get; set; }
 
         [JsonProperty("time")]
-        public Time Time { get; set; }
+        public string time { get; set; }
 
         [JsonProperty("date")]
-        public Date Date { get; set; }
-
+        public string date { get; set; }
     }
 }
