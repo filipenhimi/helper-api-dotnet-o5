@@ -1,0 +1,78 @@
+name: Deploy .NET Core API
+# new ref: https://www.youtube.com/watch?v=cGvmbYE4HOY
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [grupo12]
+
+env:
+  AZURE_WEBAPP_NAME: helper-api-dotnet-o5
+  AZURE_WEBAPP_PACKAGE_PATH: "published"
+  DOTNET_VERSION: "7.0.x"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the repo
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          ref: grupo12
+      - name: Show .NET Versions BEFORE
+        run: |
+          dotnet --list-sdks
+          echo '*** Versão default assumida para o .NET ***'
+          dotnet --version
+
+      # Setup .NET Core SDK with ${{ env.DOTNET_VERSION }}
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Show .NET Versions AFTER
+        run: |
+          dotnet --list-sdks
+          echo '*** Versão default assumida para o .NET ***'
+          dotnet --version
+
+      # Run dotnet build and publish
+      - name: Restore
+        run: dotnet restore
+        working-directory: ${{env.AZURE_WEBAPP_NAME}}
+
+      - name: Build
+        run: dotnet build --no-restore -c Release
+        working-directory: ${{env.AZURE_WEBAPP_NAME}}
+
+      - name: Publish
+        run: dotnet publish --no-build -c Release --property:PublishDir=${{env.AZURE_WEBAPP_PACKAGE_PATH}}
+        working-directory: ${{env.AZURE_WEBAPP_NAME}}
+
+      - name: Check DIR Release
+        run: |
+          echo -e "Current directory:" 
+          pwd
+          echo -e "\nList dir def" 
+          ls -laht ./
+          echo -e "\n\nList dir ${{env.AZURE_WEBAPP_NAME}}/${{env.AZURE_WEBAPP_PACKAGE_PATH}}" 
+          ls -laht ${{env.AZURE_WEBAPP_NAME}}/${{env.AZURE_WEBAPP_PACKAGE_PATH}}
+
+      # Deploy to Azure Web apps
+      - name: Deploy to Azure WebApp
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ${{env.AZURE_WEBAPP_NAME}}/${{env.AZURE_WEBAPP_PACKAGE_PATH}}
+          clean: true
+          restart: true
+          resource-group-name: pucmg-pos
+
+      # Publish artifacts
+      - name: Publish Artifacts
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: webapp
+          path: "${{env.AZURE_WEBAPP_NAME}}/${{ env.AZURE_WEBAPP_PACKAGE_PATH}}"

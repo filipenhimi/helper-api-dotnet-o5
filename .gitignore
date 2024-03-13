@@ -9,6 +9,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+bkp_*
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -396,3 +397,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Environment Variables
+.env
+*.PublishSettings
