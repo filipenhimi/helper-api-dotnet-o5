@@ -24,17 +24,32 @@ namespace helper_api_dotnet_o5.Controllers
         [ProducesResponseType(StatusCodes.Status502BadGateway)]
         public IActionResult Get(string name)
         {
-            var api = new HelperAPI(ENDPOINT);
-            var result = api.MetodoGET<List<Banco>>(string.Empty).Result;
+            try
+            {
+                _logger.LogInformation($"Buscando todos os bancos cadastrados");
 
-            if (result.Count > 0) {
+                var api = new HelperAPI(ENDPOINT);
+                var result = api.MetodoGET<List<Banco>>(string.Empty).Result;
 
-                var bancos = ObterListaDeBancosComNomesSimilares(result, name);
+                if (result.Count > 0)
+                {
 
-                return Ok(bancos);
+                    _logger.LogInformation($"Filtrando bancos que contenham: {name}");
+
+                    var bancos = ObterListaDeBancosComNomesSimilares(result, name);
+
+                    return Ok(bancos);
+                }
+                else
+                    return NoContent();
             }
-            else
-                return NoContent();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Erro ao buscar bancos cadastrados.");
+
+                throw;
+            }
+            
         }
 
         private List<Banco> ObterListaDeBancosComNomesSimilares(List<Banco> result, string name)
