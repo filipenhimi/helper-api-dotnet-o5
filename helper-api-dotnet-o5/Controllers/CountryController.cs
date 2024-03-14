@@ -1,6 +1,7 @@
 ﻿using helper_api_dotnet_o5.Infrastructure;
 using helper_api_dotnet_o5.Models.Paises;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace helper_api_dotnet_o5.Controllers
 {
