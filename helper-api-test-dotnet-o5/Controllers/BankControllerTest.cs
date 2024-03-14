@@ -9,7 +9,7 @@ namespace helper_api_test_dotnet_o5.Controllers
     public class BankControllerTest
     {
         [Fact]
-        public void Deve_retornar_ok_object_result_quando_api_estiver_disponivel()
+        public void Get_DeveRetornarOkObjectResultQuandoApiEstiverDisponivel()
         {
             //Arrange
             var loggerMock = new Mock<ILogger<BankController>>();
@@ -23,7 +23,7 @@ namespace helper_api_test_dotnet_o5.Controllers
         }
 
         [Fact]
-        public void Deve_retornar_listagem_de_bancos_que_contiver_o_parametro_name_passado_no_get()
+        public void Get_DeveRetornarListagemDeBancosQueContemNomePesquisado()
         {
             //Arrange
             var loggerMock = new Mock<ILogger<BankController>>();
@@ -39,17 +39,27 @@ namespace helper_api_test_dotnet_o5.Controllers
         }
 
         [Fact]
-        public void Dev_retornar_listagem_de_bancos_que_contiver_o_parametro_name_passado_no_get()
+        public void Get_DeveInvocarDuasVezesLogDeInformacaoENenhumaVezLogDeErroQuandoApiEstiverDisponivel()
         {
-            //Arrange
+            // Arrange
             var loggerMock = new Mock<ILogger<BankController>>();
             var sut = new BankController(loggerMock.Object);
 
-            //Act
-            var result = sut.Get("*");
+            // Act
+            var result = sut.Get("banco");
 
-            //Assert
-            Assert.IsType<OkObjectResult>(result);
+            // Assert
+            loggerMock.Verify(x => x.Log(LogLevel.Information,
+                                         It.IsAny<EventId>(),
+                                         It.IsAny<object>(),
+                                         It.IsAny<Exception>(),
+                                         (Func<object, Exception?, string>)It.IsAny<object>()), Times.Exactly(2));
+
+            loggerMock.Verify(x => x.Log(LogLevel.Error,
+                                         It.IsAny<EventId>(),
+                                         It.IsAny<object>(),
+                                         It.IsAny<Exception>(),
+                                         (Func<object, Exception?, string>)It.IsAny<object>()), Times.Never);
         }
     }
 }
