@@ -17,9 +17,9 @@ namespace helper_api_dotnet_o5.Controllers
 
         private string APIKEY = System.Environment.GetEnvironmentVariable("APIKEY") ?? APIKEYDEF;
 
-        private readonly ILogger<CountryController> _logger;
+        private readonly ILogger<NbaController> _logger;
 
-        public NbaController(ILogger<CountryController> logger)
+        public NbaController(ILogger<NbaController> logger)
         {
             _logger = logger;
         }

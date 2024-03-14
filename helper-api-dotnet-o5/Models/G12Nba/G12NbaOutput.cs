@@ -25,4 +25,6 @@ public enum Conference
 {
     East,
     West,
+    None,
+    Invalid,
 }
