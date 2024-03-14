@@ -45,7 +45,7 @@ namespace helper_api_dotnet_o5.Controllers
             var api = new HelperAPI(ENDPOINT);
             var result = api.MetodoGET<AssetDetail>(route).Result;
 
-            if (result.data.id != null)
+            if (result.data != null)
                 return Ok(result);
             else
                 return NoContent();
