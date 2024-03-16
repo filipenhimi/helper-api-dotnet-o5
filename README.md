@@ -32,7 +32,7 @@ HELPER OPENED API
 - Lucas Cruz
 - Fabrício Gomes
 
-# Grupo8 ()
+# Grupo8 (https://docs.coincap.io)
 - Tiago Rodrigues
 - Isabele Moreira
 - Rodrigo Batista
@@ -57,3 +57,6 @@ HELPER OPENED API
 
 # Grupo 13 (https://db.ygoprodeck.com/api-guide/)
 - Jefferson Azevedo Lins
+
+# Grupo 14 (https://rickandmortyapi.com/)
+- Allison Gomes
