@@ -18,7 +18,7 @@ namespace helper_api_dotnet_o5.Controllers
         }
 
         [HttpGet("{termo}")]
-        [ProducesResponseType(typeof(List<MusicResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<Musica>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status502BadGateway)]
