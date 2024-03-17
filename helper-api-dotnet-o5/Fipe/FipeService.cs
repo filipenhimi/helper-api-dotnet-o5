@@ -1,5 +1,4 @@
 ﻿using Br.Com.Parallelum.Fipe.Api;
-using Br.Com.Parallelum.Fipe.Client;
 using Br.Com.Parallelum.Fipe.Model;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -9,23 +8,19 @@ public class FipeService : IFipeService
 {
     private readonly ILogger<FipeService> _logger;
     private readonly IMemoryCache _cache;
-    private readonly FipeApi _apiInstance;
 
-    public FipeService(ILogger<FipeService> logger, IMemoryCache cache)
+    public IFipeApi ApiInstance { get; private set; }
+
+    public FipeService(ILogger<FipeService> logger, IMemoryCache cache, IFipeApi apiInstance)
     {
         _logger = logger;
         _cache = cache;
 
-        Configuration config = new();
-        config.BasePath = "https://parallelum.com.br/fipe/api/v2";
-        HttpClient httpClient = new HttpClient();
-        HttpClientHandler httpClientHandler = new HttpClientHandler();
-        _apiInstance = new FipeApi(httpClient, config, httpClientHandler);
+        ApiInstance = apiInstance;
     }
 
     public void InitCache()
     {
-
         GetModelos(VehiclesType.Cars);
         GetModelos(VehiclesType.Motorcycles);
         GetModelos(VehiclesType.Trucks);
@@ -35,10 +30,10 @@ public class FipeService : IFipeService
     {
         var key = $"modelos_{type}";
         var modelos = _cache.GetOrCreate(key, entry =>
-         {
-             entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60);
-             return GetModelosByType(type);
-         });
+        {
+            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60);
+            return GetModelosByType(type);
+        });
 
         return modelos ?? Enumerable.Empty<ModelFipe>().ToList();
     }
@@ -53,7 +48,7 @@ public class FipeService : IFipeService
             var anos = _cache.GetOrCreate(key, entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60);
-                return _apiInstance.GetYearByModelAsync(model.Tipo, model.Marca.GetId(), model.Modelo.GetId()).Result;
+                return ApiInstance.GetYearByModelAsync(model.Tipo, model.Marca.GetId(), model.Modelo.GetId()).Result;
 
             });
 
@@ -63,7 +58,7 @@ public class FipeService : IFipeService
         {
             _logger.LogError(ex, $"Erro ao tentar buscar anos do modelo {model.Modelo.Name} - {model.Marca.Name} - {model.Tipo}");
             throw;
-        } 
+        }
     }
 
     public List<InfoFipe> GetFipeResult(VehiclesType type, string ano, string modelo)
@@ -78,22 +73,22 @@ public class FipeService : IFipeService
             });
             return fipeResult ?? Enumerable.Empty<InfoFipe>().ToList();
         }
-        catch (Exception ex )
+        catch (Exception ex)
         {
             _logger.LogError(ex, $"Erro ao buscar informações da fipe {type} - {ano} - {modelo}");
             throw;
-        }    
+        }
     }
 
     private List<InfoFipe> GetFipeResultList(VehiclesType type, string ano, string modelo)
     {
         try
-        { 
-            var modelos = this.GetModelos(type).Where(m => m !=  null && m.Modelo != null && m.Modelo.Name.Contains(modelo, StringComparison.InvariantCultureIgnoreCase)).ToList();
+        {
+            var modelos = this.GetModelos(type).Where(m => m != null && m.Modelo != null && m.Modelo.Name.Contains(modelo, StringComparison.InvariantCultureIgnoreCase)).ToList();
             if (!modelos.Any())
                 return Enumerable.Empty<InfoFipe>().ToList();
 
-            Parallel.ForEach(modelos, new ParallelOptions() { MaxDegreeOfParallelism = 2 }, (model, state )=>
+            Parallel.ForEach(modelos, new ParallelOptions() { MaxDegreeOfParallelism = 2 }, (model, state) =>
             {
                 try
                 {
@@ -105,7 +100,7 @@ public class FipeService : IFipeService
                 {
                     _logger.LogError(ex, $"Error ao buscar informações dos anos do modelo {model.Tipo} - {model.Marca.Name} - {model.Modelo.Name}");
                     state.Break();
-                } 
+                }
             });
 
             var modelosPesquisa = modelos.Where(m => m.Anos.Exists(a => a.Name.Contains(ano, StringComparison.InvariantCultureIgnoreCase)));
@@ -118,7 +113,7 @@ public class FipeService : IFipeService
                 Anos = a.Anos.Where(a => a.Name.Contains(ano, StringComparison.InvariantCultureIgnoreCase)).ToList(),
             }).ToList();
 
-            var retorno  = new List<InfoFipe>();
+            var retorno = new List<InfoFipe>();
             Parallel.ForEach(modelosComAnos, new ParallelOptions() { MaxDegreeOfParallelism = 2 }, (modPesq, state) =>
             {
                 try
@@ -129,7 +124,7 @@ public class FipeService : IFipeService
                         var info = GetFipeResult(modPesq.Modelo, anoPesq.Code);
                         if (info != null)
                         {
-                            retorno.Add(info.ToInfoFipe());  
+                            retorno.Add(info.ToInfoFipe());
                         }
                     }
                 }
@@ -162,7 +157,7 @@ public class FipeService : IFipeService
             var fipeResult = _cache.GetOrCreate(key, entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(60);
-                return _apiInstance.GetFipeInfoAsync(modelo.Tipo, modelo.Marca.GetId(), modelo.Modelo.GetId(), ano).Result;
+                return ApiInstance.GetFipeInfoAsync(modelo.Tipo, modelo.Marca.GetId(), modelo.Modelo.GetId(), ano).Result;
             });
             return fipeResult;
         }
@@ -180,7 +175,7 @@ public class FipeService : IFipeService
         {
 
             _logger.LogInformation($"Buscando modelos do tipo {type}");
-            var brandsOfType = _apiInstance.GetBrandsByTypeAsync(type).Result;
+            var brandsOfType = ApiInstance.GetBrandsByTypeAsync(type).Result;
 
             Parallel.ForEach(brandsOfType, new ParallelOptions() { MaxDegreeOfParallelism = 2 }, (brand, state) =>
             {
@@ -190,7 +185,7 @@ public class FipeService : IFipeService
 
                     Thread.Sleep(100); /// Simulando um delay para evitar bloqueio da API
 
-                    var models = _apiInstance.GetModelsByBrandAsync(type, brand.GetId()).Result;
+                    var models = ApiInstance.GetModelsByBrandAsync(type, brand.GetId()).Result;
                     if (models != null)
                         modelos.AddRange(models.Select(m => new ModelFipe(type, brand, m)));
                 }
