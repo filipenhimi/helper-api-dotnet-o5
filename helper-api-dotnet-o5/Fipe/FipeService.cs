@@ -25,6 +25,7 @@ public class FipeService : IFipeService
 
     public void InitCache()
     {
+
         GetModelos(VehiclesType.Cars);
         GetModelos(VehiclesType.Motorcycles);
         GetModelos(VehiclesType.Trucks);
