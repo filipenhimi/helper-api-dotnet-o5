@@ -1,4 +1,5 @@
 using helper_api_dotnet_o5.Controllers;
+using helper_api_dotnet_o5.Infrastructure;
 using helper_api_dotnet_o5.Models.Bancos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -23,7 +24,21 @@ namespace helper_api_test_dotnet_o5.Controllers
         }
 
         [Fact]
-        public void Get_DeveRetornarListagemDeBancosQueContemNomePesquisado()
+        public void Get_DeveRetornarListagemVaziaQuandoNomePesquisadoNaoEstiverNaListagemDeBancos()
+        {
+            //Arrange
+            var loggerMock = new Mock<ILogger<BankController>>();
+            var sut = new BankController(loggerMock.Object);
+
+            //Act
+            var result = sut.Get("*");
+
+            //Assert
+            Assert.IsType<NoContentResult>(result);
+        }
+
+        [Fact]
+        public void Get_DeveRetornarListagemDeBancosQueContenhaNomePesquisado()
         {
             //Arrange
             var loggerMock = new Mock<ILogger<BankController>>();
@@ -37,6 +52,7 @@ namespace helper_api_test_dotnet_o5.Controllers
             //Assert
             Assert.True(listagemBancos?.All(x => x.NomeCompleto.ToUpper().Contains(nomePesquisado)));
         }
+
 
         [Fact]
         public void Get_DeveInvocarDuasVezesLogDeInformacaoENenhumaVezLogDeErroQuandoApiEstiverDisponivel()
