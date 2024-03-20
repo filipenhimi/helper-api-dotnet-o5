@@ -21,6 +21,16 @@ public class InvestimentoController : ControllerBase
         _simulacaoInvestimentoService = simulacaoInvestimentoService;
     }
 
+    /// <summary>
+    /// Consultar Simulação de Investimento 
+    /// </summary>
+    /// <param name="valorInvestido">Valor Investido</param>
+    /// <param name="period">Período Investito: 1 - Dias, 2 - Meses, 3 - Anos </param>
+    /// <param name="periodAmount">Quantidade de (Dias,Meses,Anos)</param>
+    /// <response code="200">Consultar simulação de investimento</response>
+    /// <response code="404">Taxa do dia não encontrado</response>
+    /// <response code="500">Oops! Não é possível realizar a simulação no momento</response>
+    [Produces("application/json")]
     [HttpGet]
     public async Task<ActionResult<SimulacaoInvestimentoDTO>> SimulacaoInvestimentoCDI([FromQuery(Name = "valorInvestido")] Decimal valorInvestido, [FromQuery(Name = "period")] EPeriod period, [FromQuery(Name = "periodAmount")] int periodAmount)
     {
