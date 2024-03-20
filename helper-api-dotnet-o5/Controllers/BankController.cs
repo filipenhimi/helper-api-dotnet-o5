@@ -12,9 +12,7 @@ namespace helper_api_dotnet_o5.Controllers
         private readonly ILogger<BankController> _logger;
 
         public BankController(ILogger<BankController> logger)
-        {
-            _logger = logger;
-        }
+            => _logger = logger;
 
         [HttpGet]
         [Route("name/{name}")]
@@ -29,17 +27,15 @@ namespace helper_api_dotnet_o5.Controllers
                 _logger.LogInformation($"Buscando todos os bancos cadastrados");
 
                 var api = new HelperAPI(ENDPOINT);
+
                 var result = api.MetodoGET<List<Banco>>(string.Empty).Result;
 
-                if (result.Count > 0)
-                {
+                _logger.LogInformation($"Filtrando bancos que contenham: {name}");
 
-                    _logger.LogInformation($"Filtrando bancos que contenham: {name}");
+                var bancos = ObterListaDeBancosComNomesSimilares(result, name);
 
-                    var bancos = ObterListaDeBancosComNomesSimilares(result, name);
-
+                if (bancos.Count > 0)
                     return Ok(bancos);
-                }
                 else
                     return NoContent();
             }
@@ -49,10 +45,11 @@ namespace helper_api_dotnet_o5.Controllers
 
                 throw;
             }
-            
         }
 
         private List<Banco> ObterListaDeBancosComNomesSimilares(List<Banco> result, string name)
-            => result.FindAll(banco => banco != null && banco.Codigo != null && banco.NomeCompleto.ToUpper().Contains(name.ToUpper()));
+            => result.FindAll(banco => banco != null && 
+                              banco.Codigo != null && 
+                              banco.NomeCompleto.ToUpper().Contains(name.ToUpper()));
     }
 }

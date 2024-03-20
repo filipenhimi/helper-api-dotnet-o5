@@ -1,18 +1,19 @@
 ﻿using helper_api_dotnet_o5.Infrastructure;
+using helper_api_dotnet_o5.Models.Bancos;
 using helper_api_dotnet_o5.Models.Paises;
-using Moq;
 
 namespace helper_api_test_dotnet_o5.Infrastructure
 {
     public class InfraTest
     {
-        private const string ENDPOINT = "https://servicodados.ibge.gov.br/api/v1";
+        private const string ENDPOINTPaises = "https://servicodados.ibge.gov.br/api/v1";
+        private const string ENDPOINTBancos = "https://brasilapi.com.br/api/banks/v1";
 
         [Fact]
-        public async Task MetodoGET_DeveRetornarObjetoCorreto()
+        public async Task MetodoGET_DeveRetornarListaDePais()
         {
             // Arrange
-            var helperAPI = new HelperAPI(ENDPOINT);
+            var helperAPI = new HelperAPI(ENDPOINTPaises);
 
             // Act
             var resultado = await helperAPI.MetodoGET<List<Pais>>("paises/BR");
@@ -20,6 +21,20 @@ namespace helper_api_test_dotnet_o5.Infrastructure
             // Assert
             Assert.NotNull(resultado); 
             Assert.IsType<List<Pais>>(resultado);
+        }
+
+        [Fact]
+        public async Task MetodoGET_DeveRetornarListaDeBanco()
+        {
+            // Arrange
+            var helperAPI = new HelperAPI(ENDPOINTBancos);
+
+            // Act
+            var resultado = await helperAPI.MetodoGET<List<Banco>>(Route: string.Empty);
+
+            // Assert
+            Assert.NotNull(resultado);
+            Assert.IsType<List<Banco>>(resultado);
         }
 
         [Fact]
