@@ -1,11 +1,13 @@
 using helper_api_dotnet_o5.Fipe;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.Json;
+using Br.Com.Parallelum.Fipe.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddScoped<IFipeApi, FipeApi>();
 builder.Services.AddScoped<IFipeService, FipeService>();
 builder.Services.AddMemoryCache();
 
