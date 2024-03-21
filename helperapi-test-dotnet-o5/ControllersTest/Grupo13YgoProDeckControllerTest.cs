@@ -113,5 +113,19 @@ namespace helperapi_test_dotnet_o5.ControllersTest
             //Assert
             Assert.IsType<OkObjectResult>(result);
         }
+
+        [Fact]
+        public void ExecutaRotaGrupo13YgoProDeckGETRandom_QuandoAPIDisponivelEParametrosOK_EntaoRetornaObjetoValido()
+        {
+            //Arrange
+            var loggerMock = new Mock<ILogger<Grupo13YgoProDeckController>>();
+            var controller = new Grupo13YgoProDeckController(loggerMock.Object);
+
+            //Act
+            var result = controller.GetRandom();
+
+            //Assert
+            Assert.IsType<OkObjectResult>(result);
+        }
     }
 }
