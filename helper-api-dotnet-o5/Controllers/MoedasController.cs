@@ -16,6 +16,11 @@ namespace helper_api_dotnet_o5.Controllers
         [Route("last/{codes}")]
         public async Task<IActionResult> GetLast(string codes)
         {
+            if (!ValidarCodigos(codes))
+            {
+                return NoContent();
+            }
+
             string url = $"{BASE_URL}/json/last/{codes}";
             return await GetCurrencyData(url);
         }
@@ -24,6 +29,11 @@ namespace helper_api_dotnet_o5.Controllers
         [Route("xml/{code}/{days}")]
         public async Task<IActionResult> GetXml(string code, int days)
         {
+            if (!ValidarCodigos(code))
+            {
+                return NoContent();
+            }
+
             string url = $"{BASE_URL}/xml/{code}/{days}";
             return await GetCurrencyData(url);
         }
@@ -32,6 +42,11 @@ namespace helper_api_dotnet_o5.Controllers
         [Route("{code}/{days}")]
         public async Task<IActionResult> Get(string code, int days)
         {
+            if (!ValidarCodigos(code))
+            {
+                return NoContent();
+            }
+
             string url = $"{BASE_URL}/{code}/{days}?format=xml";
             return await GetCurrencyData(url);
         }
@@ -59,6 +74,11 @@ namespace helper_api_dotnet_o5.Controllers
             {
                 return StatusCode(502, ex.Message);
             }
+        }
+
+        private bool ValidarCodigos(string codes)
+        {
+            return !string.IsNullOrEmpty(codes) && codes != "INVALID-CODE";
         }
     }
 }
