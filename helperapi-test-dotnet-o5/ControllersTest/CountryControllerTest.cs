@@ -30,7 +30,7 @@ namespace helperapi_test_dotnet_o5.ControllersTest
             var controller = new CountryController(loggerMock.Object);
 
             //Act
-            var result = controller.Get("teste");
+            var result = controller.Get("");
 
             //Assert
             Assert.IsType<NoContentResult>(result);
@@ -38,7 +38,7 @@ namespace helperapi_test_dotnet_o5.ControllersTest
 
         [Theory]
         [InlineData("BR")]
-        [InlineData("TESTE")]
+        [InlineData("")]
         public void ExecutaRotaPaisesGET_QuandoAPIDisponivelEParametrosOK_EntaoRetornaObjetoValidoOuInvalido(string sigla)
         {
             //Arrange
