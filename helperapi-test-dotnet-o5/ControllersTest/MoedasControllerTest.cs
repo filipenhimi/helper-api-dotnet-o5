@@ -14,14 +14,15 @@ namespace helperapi_test_dotnet_o5.ControllersTest
         [Fact]
         public void TestMethod()
         {
-
-            var controller = new MoedasController();
             // Arrange
+            var controller = new MoedasController();
             var loggerMock = new Mock<ILogger<MoedasController>>();
             var codes = "USD-BRL,EUR-BRL";
 
             // Act
-            var result = controller.GetLast(codes);
+            var resultTask = controller.GetLast(codes);
+            resultTask.Wait(); // Aguarda a conclusão da tarefa
+            var result = resultTask.GetAwaiter().GetResult(); // Obtém o resultado real da tarefa
 
             // Assert
             Assert.IsType<OkObjectResult>(result);
