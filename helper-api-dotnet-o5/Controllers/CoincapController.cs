@@ -63,7 +63,7 @@ namespace helper_api_dotnet_o5.Controllers
             var api = new HelperAPI(ENDPOINT);
             var result = api.MetodoGET<History>(route).Result;
 
-            if (result.data.Count > 0)
+            if (result.data != null)
                 return Ok(result);
             else
                 return NoContent();
