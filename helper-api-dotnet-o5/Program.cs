@@ -22,11 +22,6 @@ builder.Services.AddSwaggerGen(c =>
         Description = "Projeto da disciplina de PIES - API REST",
         TermsOfService = new Uri("https://github.com/filipenhimi/helper-api-dotnet-o5/"),
     });
-
-    // Set the comments path for the Swagger JSON and UI.
-    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    c.IncludeXmlComments(xmlPath);
 });
 
 var app = builder.Build();
