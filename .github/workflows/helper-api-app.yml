@@ -9,6 +9,7 @@ env:
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 7.0.x
   WORKING_DIRECTORY: .\helper-api-dotnet-o5
+  WORKING_DIRECTORY_TEST: .\helperapi_test_dotnet_o5_grupo9
 jobs:
   build:
     runs-on: windows-latest
