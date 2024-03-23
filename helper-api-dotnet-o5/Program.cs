@@ -21,11 +21,6 @@ builder.Services.AddSwaggerGen(c =>
         Title = "PIES - Projeto Integrado em Engenharia de Software",
         Description = "Projeto da disciplina de PIES - API REST",
         TermsOfService = new Uri("https://github.com/filipenhimi/helper-api-dotnet-o5/"),
-        License = new OpenApiLicense
-        {
-            Name = "Use under LICX",
-            Url = new Uri("https://www.endorlabs.com/learn/open-source-licensing-simplified-a-comparative-overview-of-popular-licenses"),
-        }
     });
 
     // Set the comments path for the Swagger JSON and UI.
