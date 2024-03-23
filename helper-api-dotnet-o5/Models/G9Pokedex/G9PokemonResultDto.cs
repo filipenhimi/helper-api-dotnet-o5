@@ -2,7 +2,7 @@
 
 namespace helper_api_dotnet_o5.Models.G9Pokedex;
 
-public class G9PokemonResult
+public class G9PokemonResultDto
 {
     [JsonProperty("count")]
     public int Count { get; set; }

@@ -2,7 +2,7 @@
 
 namespace helper_api_dotnet_o5.Models.G9Pokedex;
 
-    public class G9PokemonEvolutionResult
+    public class G9PokemonEvolutionResultDto
     {
         [JsonProperty("chain")]
         public Chain Chain { get; set; }

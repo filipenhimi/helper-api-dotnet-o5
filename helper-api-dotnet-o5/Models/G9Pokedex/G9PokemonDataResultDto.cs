@@ -2,7 +2,7 @@
 
 namespace helper_api_dotnet_o5.Models.G9Pokedex;
 
-public class G9PokemonDataResult
+public class G9PokemonDataResultDto
 {
     [JsonProperty("abilities")]
     public List<Ability> Abilities { get; set; }
