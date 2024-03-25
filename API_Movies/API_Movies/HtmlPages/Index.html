@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 90%; /* Adjust the width as needed */
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            button:hover {
+                background-color: #0056b3;
+            }
+
+        #movieDetails {
+            display: flex; /* Use flexbox */
+            flex-wrap: wrap; /* Allow items to wrap */
+            justify-content: center; /* Center items horizontally */
+            margin-top: 20px;
+        }
+
+        .movie {
+            flex: 0 0 calc(25% - 20px); /* Adjust width of movie card */
+            margin: 10px; /* Adjust spacing between movie cards */
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+            .movie img {
+                max-width: 100%;
+                max-height: 200px; /* Set maximum height for movie images */
+                border-radius: 5px;
+                margin-bottom: 10px;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Search for a Movie</h2>
+        <form id="movieForm">
+            <label for="movieName">Movie Name:</label>
+            <input type="text" id="movieName" name="movieName" required>
+            <button type="submit">Search</button>
+        </form>
+        <div id="movieDetails"></div>
+    </div>
+
+    <script>
+        document.getElementById("movieForm").addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Get the movie name from the input field
+            var movieName = document.getElementById("movieName").value;
+
+            // Send a GET request to the controller endpoint with the movie name
+            fetch("/api/Movies?movieName=" + encodeURIComponent(movieName))
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the response data (e.g., display movie details)
+                    displayMovieDetails(data);
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+        });
+
+        function displayMovieDetails(movies) {
+            var movieDetailsDiv = document.getElementById("movieDetails");
+            movieDetailsDiv.innerHTML = "";
+            movies.forEach(movie => {
+                var movieDiv = document.createElement("div");
+                movieDiv.classList.add("movie"); // Add movie class to div
+                movieDiv.innerHTML = `
+                        <h3>${movie.title}</h3>
+                        <p>${movie.overview}</p>
+                        <p>Popularity: ${movie.popularity}</p>
+                        <img src="https://image.tmdb.org/t/p/w500${movie.posterPath}" alt="${movie.title} Poster">
+                    `;
+                movieDetailsDiv.appendChild(movieDiv);
+            });
+        }
+    </script>
+</body>
+</html>
