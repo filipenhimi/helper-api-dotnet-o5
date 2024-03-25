@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API_Movies", "API_Movies.csproj", "{47380DA8-2F9B-469E-9AD2-45F2283523F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API_Movies-teste-dotnet", "..\API_Movies-teste-dotnet\API_Movies-teste-dotnet.csproj", "{E3CC9093-EB3C-45B6-B54D-2224DE63A5AB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{47380DA8-2F9B-469E-9AD2-45F2283523F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47380DA8-2F9B-469E-9AD2-45F2283523F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47380DA8-2F9B-469E-9AD2-45F2283523F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47380DA8-2F9B-469E-9AD2-45F2283523F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3CC9093-EB3C-45B6-B54D-2224DE63A5AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3CC9093-EB3C-45B6-B54D-2224DE63A5AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3CC9093-EB3C-45B6-B54D-2224DE63A5AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3CC9093-EB3C-45B6-B54D-2224DE63A5AB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DD0BC45C-2D3D-4D35-B2FB-FD3B4DA66BAF}
+	EndGlobalSection
+EndGlobal
