@@ -51,6 +51,14 @@ namespace helper_api_dotnet_o5.Controllers
             return await GetCurrencyData(url);
         }
 
+        [HttpGet]
+        [Route("available")]
+        public async Task<IActionResult> GetAvailableCurrencies()
+        {
+            string url = $"{BASE_URL}/available";
+            return await GetCurrencyData(url);
+        }
+
         private async Task<IActionResult> GetCurrencyData(string url)
         {
             try
@@ -61,8 +69,45 @@ namespace helper_api_dotnet_o5.Controllers
 
                     if (response.IsSuccessStatusCode)
                     {
-                        string json = await response.Content.ReadAsStringAsync();
-                        return Ok(json);
+                        string content = await response.Content.ReadAsStringAsync();
+                        return Ok(content);
+                    }
+                    else
+                    {
+                        return StatusCode((int)response.StatusCode);
+                    }
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(502, ex.Message);
+            }
+        }
+
+        [HttpGet("moedas")]
+        public async Task<IActionResult> ObterDadosMoedas([FromBody] List<string> codigosMoedas)
+        {
+            if (codigosMoedas == null || codigosMoedas.Count == 0)
+            {
+                return BadRequest("Nenhum código de moeda fornecido.");
+            }
+
+            string url = $"{BASE_URL}/last/{string.Join(",", codigosMoedas)}";
+            return await ObterDadosDaApi(url); // Renomeamos o método GetCurrencyData para ObterDadosDaApi
+        }
+
+        private async Task<IActionResult> ObterDadosDaApi(string url) // Renomeamos o método GetCurrencyData para ObterDadosDaApi
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage response = await client.GetAsync(url);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string content = await response.Content.ReadAsStringAsync();
+                        return Ok(content);
                     }
                     else
                     {
